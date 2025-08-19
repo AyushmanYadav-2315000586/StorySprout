@@ -4,7 +4,7 @@ import loginIllustration from "../assets/images/login.png";
 import { googleLogin } from "../components/Firebase";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 
-const API_BASE = "http://localhost:8081"; // Change if backend is hosted
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const SignUp = ({ setUser }) => {
   const [name, setName] = useState("");

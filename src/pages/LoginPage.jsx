@@ -3,7 +3,8 @@ import GoogleLoginButton from "../components/GoogleLoginPage";
 import { googleLogin } from "../components/Firebase";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:8081";
+const API_BASE = import.meta.env.VITE_API_URL;
+
 
 export default function LoginPage({ setUser }) {
   const [email, setEmail] = useState("");

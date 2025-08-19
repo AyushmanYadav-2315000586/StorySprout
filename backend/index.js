@@ -16,7 +16,19 @@ const DB_URI = process.env.MONGODB_URI;
 
 // === Middleware ===
 app.use(express.json());
-app.use(cors());
+// === Middleware ===
+app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // local dev (Vite default)
+      "https://storysproutofficial.netlify.app/", // your Netlify domain
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 
 // Fix COOP warning for Firebase popup login
 app.use((req, res, next) => {
