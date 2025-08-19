@@ -8,7 +8,6 @@ import StoryHeader from "../components/StoryHeader";
 import StoryContent from "../components/StoryContent";
 import PersonalMessage from "../components/PersonalMessage";
 
-
 const StoryResult = () => {
   const [searchParams] = useSearchParams();
   const [story, setStory] = useState(null);
@@ -21,7 +20,9 @@ const StoryResult = () => {
       childName: searchParams.get("name") || "Little One",
       age: parseInt(searchParams.get("age") || "6"),
       gender: searchParams.get("gender") || "Other",
-      characters: (searchParams.get("characters") || "magical friend").split(","),
+      characters: (searchParams.get("characters") || "magical friend").split(
+        ","
+      ),
       setting: searchParams.get("setting") || "",
       customSetting: searchParams.get("customSetting") || "",
       theme: searchParams.get("theme") || "Curiosity and Friendship",
@@ -33,9 +34,12 @@ const StoryResult = () => {
   }, [searchParams]);
 
   // ✅ API call
+  const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+
   const generateStoryFromAPI = async () => {
     try {
-      const res = await fetch("http://localhost:8081/api/story/create", {
+      const res = await fetch(`${API_BASE_URL}/api/story/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
