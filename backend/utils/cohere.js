@@ -8,22 +8,21 @@ const COHERE_API_KEY = process.env.COHERE_API_KEY;
 export async function generateStoryFromCohere(prompt) {
   try {
     const response = await axios.post(
-      "https://api.cohere.ai/v1/generate",
+      "https://api.cohere.ai/v1/chat",
       {
-        model: "command",
-        prompt: prompt,
-        max_tokens: 1000,
-        temperature: 0.8
+        model: "command-r-08-2024",
+        message: prompt,
+        temperature: 0.8,
       },
       {
         headers: {
-          "Authorization": `Bearer ${COHERE_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${COHERE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
       }
     );
 
-    const generatedText = response.data.generations?.[0]?.text;
+    const generatedText = response.data.text;
     if (!generatedText) {
       console.error("❌ Cohere returned no text:", response.data);
       throw new Error("No text returned from Cohere.");
@@ -31,7 +30,15 @@ export async function generateStoryFromCohere(prompt) {
 
     return generatedText;
   } catch (error) {
-    console.error("❌ Error from Cohere:", error.message);
+    if (error.response) {
+      console.error("❌ Cohere API Error Status:", error.response.status);
+      console.error(
+        "❌ Cohere API Error Data:",
+        JSON.stringify(error.response.data, null, 2)
+      );
+    } else {
+      console.error("❌ Error from Cohere:", error.message);
+    }
     throw new Error("Cohere API failed");
   }
 }

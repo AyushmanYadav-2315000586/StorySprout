@@ -29,10 +29,14 @@ export const createStory = async (req, res) => {
     finalCharacters = [...new Set(finalCharacters)];
 
     // ✅ Final Setting
-    const finalSetting = customSetting.trim() || setting.trim() || "a magical place";
+    const finalSetting =
+      customSetting.trim() || setting.trim() || "a magical place";
 
     // ✅ Final Theme - multiple themes allowed, deduplicated
-    let themeParts = theme.split(",").map((t) => t.trim()).filter(Boolean);
+    let themeParts = theme
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
 
     if (customTheme.trim()) {
       themeParts.push(customTheme.trim());
@@ -44,7 +48,9 @@ export const createStory = async (req, res) => {
     const storyTitle = title?.trim() || `The ${finalTheme} of ${childName}`;
 
     // ✅ Prompt for Cohere
-    const prompt = `Write an engaging story in English for a ${age}-year-old. Title: "${storyTitle}". Characters: ${finalCharacters.join(", ")}. Setting: ${finalSetting}. Theme: ${finalTheme}. The story should be fun and imaginative.`;
+    const prompt = `Write an engaging story in English for a ${age}-year-old. Title: "${storyTitle}". Characters: ${finalCharacters.join(
+      ", "
+    )}. Setting: ${finalSetting}. Theme: ${finalTheme}. The story should be fun and imaginative.`;
 
     console.log("📨 Prompt being sent to Cohere:", prompt);
 
@@ -74,6 +80,11 @@ export const createStory = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Error generating story:", error);
+    if (error.message === "Cohere API failed") {
+      return res
+        .status(502)
+        .json({ error: "Failed to generate story from AI provider." });
+    }
     res.status(500).json({ error: "Failed to generate story." });
   }
 };
