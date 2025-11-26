@@ -34,8 +34,7 @@ const StoryResult = () => {
   }, [searchParams]);
 
   // ✅ API call
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
   const generateStoryFromAPI = async () => {
     try {
